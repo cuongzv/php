@@ -1,43 +1,365 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Cabelo, unhas, rosto, massagem e barber num espaço luminoso, a poucos passos do mar.">
-<meta name="theme-color" content="#f5f5f0">
-<meta name="robots" content="noindex, nofollow">
-<link rel="icon" type="image/svg+xml" href="https://beautyportcascais.com/favicon.svg">
-<link rel="canonical" href="https://example.com/">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Beauty Port Cascais — Beauty salon · centro de Cascais">
-<meta property="og:description" content="Cabelo, unhas, rosto, massagem e barber num espaço luminoso, a poucos passos do mar.">
-<meta property="og:url" content="https://example.com/">
-<meta name="twitter:card" content="summary">
-<title>Beauty Port Cascais — Beauty salon · centro de Cascais</title>
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18306026037"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
-window.gtag("js", new Date());
-window.gtag("config", "AW-18306026037");
-</script>
-<link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Trợ Lý Đặt Phòng - Gemini Voice AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .pulse-animation {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1.08); box-shadow: 0 0 0 18px rgba(239, 68, 68, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+    </style>
 </head>
-<body>
-<a class="skip-link" href="#main-content">Ir para o conteúdo</a>
-<div data-include="partials/header.html"></div>
-<main id="main-content">
-<div data-include="partials/hero.html"></div>
-<div data-include="partials/services.html"></div>
-<div data-include="partials/space.html"></div>
-<div data-include="partials/prices.html"></div>
-<div data-include="partials/portfolio.html"></div>
-<div data-include="partials/team.html"></div>
-<div data-include="partials/contact.html"></div>
-<div data-include="partials/visit.html"></div>
-</main>
-<div data-include="partials/footer.html"></div>
-<script src="js/loader.js"></script>
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"feaf43d132af4a53b01e6fa3b353b29c","r":1,"spa":2}' crossorigin="anonymous"></script>
+<body class="bg-slate-900 text-white min-h-screen flex flex-col font-sans select-none">
+
+    <audio id="tts-audio" playsinline webkit-playsinline style="display:none;"></audio>
+
+    <header class="bg-slate-800 border-b border-slate-700 p-4 text-center shadow-lg">
+        <h1 class="text-xl md:text-2xl font-bold text-emerald-400 flex items-center justify-center gap-2">
+            <i class="fa-solid fa-robot"></i> TRỢ LÝ ĐÀM THOẠI QUẢN LÝ ĐẶT PHÒNG
+        </h1>
+        <p class="text-xs md:text-sm text-slate-400 mt-1">Tương thích iOS Safari, Android & Máy tính</p>
+    </header>
+
+    <div class="flex-1 max-w-5xl w-full mx-auto p-4 flex flex-col md:flex-row gap-4 overflow-hidden">
+        
+        <!-- Cột trái: Lịch -->
+        <div class="w-full md:w-1/3 bg-slate-800/80 rounded-2xl p-4 border border-slate-700 flex flex-col shadow-xl">
+            <h2 class="text-md font-semibold text-amber-400 mb-3 flex items-center gap-2 border-b border-slate-700 pb-2">
+                <i class="fa-solid fa-calendar-days"></i> LỊCH (-10 NGÀY TỚI +30 NGÀY)
+            </h2>
+            <div id="calendar-list" class="flex-1 overflow-y-auto space-y-3 pr-1 text-sm text-slate-300 custom-scrollbar max-h-[300px] md:max-h-full">
+                <div class="text-center text-slate-400 py-4 animate-pulse">
+                    <i class="fa-solid fa-spinner fa-spin mr-2"></i> Đang đồng bộ lịch...
+                </div>
+            </div>
+        </div>
+
+        <!-- Cột phải: Chat & Mic -->
+        <div class="w-full md:w-2/3 bg-slate-800/80 rounded-2xl p-4 border border-slate-700 flex flex-col justify-between shadow-xl">
+            
+            <div id="chat-box" class="flex-1 overflow-y-auto space-y-4 p-2 min-h-[280px] max-h-[400px] custom-scrollbar">
+                <div class="flex items-start gap-3">
+                    <div class="w-9 h-9 rounded-full bg-emerald-600 flex items-center justify-center text-sm font-bold shadow-md">AI</div>
+                    <div class="bg-slate-700 rounded-2xl rounded-tl-none p-3.5 max-w-[80%] text-slate-200 text-sm leading-relaxed shadow-sm">
+                        Xin chào anh! Em đang tải lịch từ hệ thống...
+                    </div>
+                </div>
+            </div>
+
+            <div id="status-text" class="text-center text-xs font-medium text-emerald-400 my-2 h-5 tracking-wide">
+                Đang khởi tạo...
+            </div>
+
+            <div class="flex flex-col items-center justify-center pt-3 border-t border-slate-700/80">
+                <button id="mic-btn" onclick="toggleListening()" class="w-20 h-20 rounded-full bg-slate-600 hover:bg-slate-500 text-white flex items-center justify-center text-3xl shadow-lg transition-all duration-300 cursor-not-allowed" disabled>
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+                <p class="text-xs text-slate-400 mt-2">Chạm nút Mic để Bắt đầu / Dừng đàm thoại</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ================= CẤU HÌNH =================
+        const GEMINI_API_KEY = "AIzaSyAAFRYjAvdss97tBfh3siOqRqinrQhulf8"; 
+        const GEMINI_MODEL = "gemini-3.8-flash-lite"; 
+        
+        // MÃ WEB APP GOOGLE APPS SCRIPT CỦA ANH
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbxh7Auw8nP6ZgMNpqX4bGzrrzNxWdIiJ0Wfop-VuyE0U-RpFSv8_bdtv2Esu7gs2rbb/exec"; 
+
+        let SYSTEM_PROMPT = `
+Bạn là một trợ lý ảo quản lý lịch đặt phòng khách sạn/homestay chuyên nghiệp, thân thiện.
+Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN')}.
+
+Quy tắc:
+1. Luôn trả lời bằng tiếng Việt.
+2. Trả lời cực kỳ ngắn gọn, cô đọng (tối đa 2 đến 3 câu).
+3. Luôn xưng "em" và gọi người dùng là "anh".
+`;
+
+        // ================= BIẾN TOÀN CỤC =================
+        let conversationHistory = [];
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = null;
+        let isListening = false;
+        let isSpeaking = false;
+        const ttsAudio = document.getElementById("tts-audio");
+
+        // ================= KHỞI TẠO DỮ LIỆU TỪ GOOGLE CALENDAR =================
+        async function fetchCalendarFromGAS() {
+            try {
+                const response = await fetch(GAS_URL);
+                const data = await response.json();
+                
+                const calendarListUI = document.getElementById('calendar-list');
+                calendarListUI.innerHTML = ""; 
+
+                if (data.events && data.events.length > 0) {
+                    let calendarText = "\n\nDưới đây là danh sách lịch đặt phòng (từ 10 ngày trước đến 30 ngày tới):\n";
+                    
+                    data.events.forEach((event, index) => {
+                        calendarText += `${index + 1}. Ngày ${event.date}: ${event.title} - ${event.description}\n`;
+                        
+                        calendarListUI.innerHTML += `
+                            <div class="p-3 bg-slate-700/60 rounded-xl border-l-4 border-emerald-500 shadow-sm mb-3">
+                                <div class="font-bold text-white flex justify-between">
+                                    <span>${event.date}</span>
+                                </div>
+                                <div class="text-slate-200 mt-1">${event.title}</div>
+                                <div class="text-slate-400 text-xs mt-1 truncate">${event.description}</div>
+                            </div>
+                        `;
+                    });
+
+                    SYSTEM_PROMPT += calendarText;
+                } else {
+                    SYSTEM_PROMPT += "\n\nHiện tại không có lịch đặt phòng nào trong khoảng 10 ngày trước đến 30 ngày tới.";
+                    calendarListUI.innerHTML = `<div class="text-center text-slate-400 py-4">Chưa có dữ liệu lịch.</div>`;
+                }
+                
+                const micBtn = document.getElementById('mic-btn');
+                micBtn.disabled = false;
+                micBtn.classList.replace("bg-slate-600", "bg-emerald-500");
+                micBtn.classList.replace("hover:bg-slate-500", "hover:bg-emerald-600");
+                micBtn.classList.remove("cursor-not-allowed");
+                micBtn.classList.add("cursor-pointer");
+
+                setStatus("Sẵn sàng trò chuyện...");
+                appendMessage("AI", "Em đã đồng bộ lịch 10 ngày trước và 30 ngày tới xong. Anh bấm nút Micro để hỏi em nhé!");
+
+            } catch (error) {
+                console.error("Lỗi lấy lịch từ GAS:", error);
+                setStatus("❌ Lỗi đồng bộ lịch, anh tải lại trang nhé.");
+                document.getElementById('calendar-list').innerHTML = `<div class="text-center text-red-400 py-4">Lỗi tải dữ liệu. Vui lòng kiểm tra link GAS!</div>`;
+            }
+        }
+
+        // ================= CẤU HÌNH NHẬN DIỆN GIỌNG NÓI =================
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.lang = 'vi-VN';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onstart = () => {
+                isListening = true;
+                updateMicUI(true);
+                setStatus("🔴 Đang nghe anh nói...");
+            };
+
+            recognition.onresult = async (event) => {
+                const userText = event.results[0][0].transcript;
+                appendMessage("User", userText);
+                setStatus("⏳ Gemini đang suy nghĩ...");
+                await processUserMessage(userText);
+            };
+
+            recognition.onerror = (event) => {
+                console.error("Lỗi Mic:", event.error);
+                setStatus("❌ Chưa nghe rõ, anh bấm mic nói lại nhé!");
+                stopListeningState();
+            };
+
+            recognition.onend = () => {
+                isListening = false;
+                if (!isSpeaking) updateMicUI(false);
+            };
+        } else {
+            alert("Trình duyệt không hỗ trợ nhận diện giọng nói. Hãy dùng Safari/Chrome/Edge!");
+        }
+
+        function unlockAudioForiOS() {
+            if (ttsAudio) {
+                ttsAudio.src = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==";
+                ttsAudio.play().then(() => ttsAudio.pause()).catch(() => {});
+            }
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const silentUtterance = new SpeechSynthesisUtterance('');
+                silentUtterance.volume = 0;
+                window.speechSynthesis.speak(silentUtterance);
+            }
+        }
+
+        function toggleListening() {
+            unlockAudioForiOS();
+            if (ttsAudio) ttsAudio.pause();
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            isSpeaking = false;
+
+            if (isListening) {
+                recognition.stop();
+                stopListeningState();
+            } else {
+                try { recognition.start(); } 
+                catch (e) {
+                    recognition.stop();
+                    setTimeout(() => recognition.start(), 200);
+                }
+            }
+        }
+
+        function stopListeningState() {
+            isListening = false;
+            updateMicUI(false);
+            setStatus("Sẵn sàng trò chuyện...");
+        }
+
+        function updateMicUI(active) {
+            const btn = document.getElementById("mic-btn");
+            if (active) {
+                btn.classList.replace("bg-emerald-500", "bg-red-500");
+                btn.classList.replace("hover:bg-emerald-600", "pulse-animation");
+            } else {
+                btn.classList.replace("bg-red-500", "bg-emerald-500");
+                btn.classList.replace("pulse-animation", "hover:bg-emerald-600");
+            }
+        }
+
+        function setStatus(text) {
+            document.getElementById("status-text").innerText = text;
+        }
+
+        function appendMessage(sender, text) {
+            const chatBox = document.getElementById("chat-box");
+            const div = document.createElement("div");
+            div.className = "flex items-start gap-3 " + (sender === "User" ? "justify-end" : "");
+
+            if (sender === "User") {
+                div.innerHTML = `
+                    <div class="bg-emerald-600 text-white rounded-2xl rounded-tr-none p-3.5 max-w-[80%] text-sm leading-relaxed shadow-sm">
+                        ${text}
+                    </div>
+                    <div class="w-9 h-9 rounded-full bg-slate-600 flex items-center justify-center text-sm font-bold shadow-md">Anh</div>
+                `;
+            } else {
+                const uiText = text.replace(/\*\*/g, ''); 
+                div.innerHTML = `
+                    <div class="w-9 h-9 rounded-full bg-emerald-600 flex items-center justify-center text-sm font-bold shadow-md">AI</div>
+                    <div class="bg-slate-700 text-slate-200 rounded-2xl rounded-tl-none p-3.5 max-w-[80%] text-sm leading-relaxed shadow-sm">
+                        ${uiText}
+                    </div>
+                `;
+            }
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function processUserMessage(userQuery) {
+            conversationHistory.push({ role: "user", parts: [{ text: userQuery }] });
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+                        contents: conversationHistory
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    const aiReply = data.candidates[0].content.parts[0].text;
+                    conversationHistory.push({ role: "model", parts: [{ text: aiReply }] });
+                    
+                    appendMessage("AI", aiReply);
+                    speakVietnamese(aiReply);
+                } else {
+                    speakVietnamese("Em xin lỗi, chưa lấy được phản hồi. Anh thử lại nhé!");
+                }
+            } catch (error) {
+                console.error("Lỗi API Gemini:", error);
+                speakVietnamese("Kết nối mạng có chút sự cố rồi anh ạ!");
+            }
+        }
+
+        function speakVietnamese(text) {
+            const cleanText = text.replace(/[\*\#\-\_\<\>]/g, '').trim();
+            if (!cleanText) return;
+
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(cleanText);
+                utterance.lang = 'vi-VN';
+                
+                const voices = window.speechSynthesis.getVoices();
+                const viVoice = voices.find(v => v.lang && (v.lang.includes('vi') || v.lang.includes('VI')));
+                if (viVoice) utterance.voice = viVoice;
+
+                utterance.onstart = () => {
+                    isSpeaking = true;
+                    setStatus("🔊 Gemini đang trả lời...");
+                    updateMicUI(true);
+                };
+
+                utterance.onend = () => {
+                    isSpeaking = false;
+                    setStatus("Sẵn sàng trò chuyện...");
+                    updateMicUI(false);
+                };
+
+                utterance.onerror = (e) => {
+                    speakViaGoogleTTS(cleanText);
+                };
+
+                window.speechSynthesis.speak(utterance);
+            } else {
+                speakViaGoogleTTS(cleanText);
+            }
+        }
+
+        function speakViaGoogleTTS(cleanText) {
+            const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(cleanText)}&tl=vi&client=tw-ob`;
+            ttsAudio.src = ttsUrl;
+            
+            ttsAudio.onplay = () => {
+                isSpeaking = true;
+                setStatus("🔊 Gemini đang trả lời...");
+                updateMicUI(true);
+            };
+
+            ttsAudio.onended = () => {
+                isSpeaking = false;
+                setStatus("Sẵn sàng trò chuyện...");
+                updateMicUI(false);
+            };
+
+            ttsAudio.onerror = (err) => {
+                setStatus("Sẵn sàng trò chuyện...");
+                isSpeaking = false;
+                updateMicUI(false);
+            };
+
+            ttsAudio.play().catch(e => {
+                setStatus("Anh vui lòng chạm vào nút Mic để thử lại!");
+                isSpeaking = false;
+                updateMicUI(false);
+            });
+        }
+
+        window.onload = () => {
+            fetchCalendarFromGAS();
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+            }
+        };
+    </script>
 </body>
 </html>
